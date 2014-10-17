@@ -1,0 +1,88 @@
+<ASSEMBLER_INFO>
+ <VERSION>2.1.52</VERSION>
+ <DEVICE>"ATtiny13"</DEVICE>
+ <WORKING_DIR>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\Debug</WORKING_DIR>
+ <INCLUDE_PATH>
+  <DIR>C:\Program Files (x86)\Atmel\Atmel Toolchain\AVR Assembler\Native\2.1.1117\avrassembler\Include</DIR>
+  <DIR></DIR>
+ </INCLUDE_PATH>
+ <SOURCE_FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\LittleThermo.asm</SOURCE_FILE>
+ <INCLUDED_FILES>
+  <FILE>C:\Program Files (x86)\Atmel\Atmel Toolchain\AVR Assembler\Native\2.1.1117\avrassembler\Include\tn13def.inc</FILE>
+  <FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\avr.inc</FILE>
+  <FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\1-wire.asm</FILE>
+  <FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\wait.asm</FILE>
+  <FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\1-Wire Search.asm</FILE>
+ </INCLUDED_FILES>
+ <OBJECT_FILES>
+  <FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\Debug/LittleThermo.obj</FILE>
+ </OBJECT_FILES>
+ <HEX_FILES>
+  <FILE>LittleThermo.hex</FILE>
+ </HEX_FILES>
+ <OUTPUT_FILES>
+  <FILE>LittleThermo.map</FILE>
+  <FILE>LittleThermo.lss</FILE>
+ </OUTPUT_FILES>
+ <LABELS>
+  <LineBuf><FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\LittleThermo.asm</FILE><LINE>23</LINE></LineBuf>
+  <ByteBuf><FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\LittleThermo.asm</FILE><LINE>24</LINE></ByteBuf>
+  <RESET><FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\LittleThermo.asm</FILE><LINE>64</LINE></RESET>
+  <main><FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\LittleThermo.asm</FILE><LINE>74</LINE></main>
+  <ReadOneWire><FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\LittleThermo.asm</FILE><LINE>88</LINE></ReadOneWire>
+  <OWReset><FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\1-wire.asm</FILE><LINE>34</LINE></OWReset>
+  <OWWriteByte><FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\1-wire.asm</FILE><LINE>93</LINE></OWWriteByte>
+  <WaitMiliseconds><FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\wait.asm</FILE><LINE>62</LINE></WaitMiliseconds>
+  <read_temp_onewire><FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\LittleThermo.asm</FILE><LINE>111</LINE></read_temp_onewire>
+  <OWReadByte><FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\1-wire.asm</FILE><LINE>152</LINE></OWReadByte>
+  <temp_up_zerro><FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\LittleThermo.asm</FILE><LINE>119</LINE></temp_up_zerro>
+  <less50><FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\LittleThermo.asm</FILE><LINE>132</LINE></less50>
+  <less40><FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\LittleThermo.asm</FILE><LINE>137</LINE></less40>
+  <less30><FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\LittleThermo.asm</FILE><LINE>142</LINE></less30>
+  <Wait4xCycles><FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\wait.asm</FILE><LINE>50</LINE></Wait4xCycles>
+  <WaitMsLoop><FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\wait.asm</FILE><LINE>64</LINE></WaitMsLoop>
+  <OWWriteBit><FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\1-wire.asm</FILE><LINE>66</LINE></OWWriteBit>
+  <OWWriteZero><FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\1-wire.asm</FILE><LINE>71</LINE></OWWriteZero>
+  <OWWriteOne><FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\1-wire.asm</FILE><LINE>74</LINE></OWWriteOne>
+  <OWWriteLoop><FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\1-wire.asm</FILE><LINE>97</LINE></OWWriteLoop>
+  <OWReadBit><FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\1-wire.asm</FILE><LINE>115</LINE></OWReadBit>
+  <OWReadBitEnd><FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\1-wire.asm</FILE><LINE>140</LINE></OWReadBitEnd>
+  <OWReadLoop><FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\1-wire.asm</FILE><LINE>155</LINE></OWReadLoop>
+  <OWFirst><FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\1-Wire Search.asm</FILE><LINE>47</LINE></OWFirst>
+  <LastDiscrepancy><FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\1-Wire Search.asm</FILE><LINE>415</LINE></LastDiscrepancy>
+  <LastFamilyDiscrepancy><FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\1-Wire Search.asm</FILE><LINE>416</LINE></LastFamilyDiscrepancy>
+  <stored_search_flags><FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\1-Wire Search.asm</FILE><LINE>410</LINE></stored_search_flags>
+  <OWNext><FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\1-Wire Search.asm</FILE><LINE>61</LINE></OWNext>
+  <last_zero><FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\1-Wire Search.asm</FILE><LINE>414</LINE></last_zero>
+  <rom_byte_number><FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\1-Wire Search.asm</FILE><LINE>412</LINE></rom_byte_number>
+  <crc8><FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\1-Wire Search.asm</FILE><LINE>417</LINE></crc8>
+  <id_bit_number><FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\1-Wire Search.asm</FILE><LINE>411</LINE></id_bit_number>
+  <rom_byte_mask><FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\1-Wire Search.asm</FILE><LINE>413</LINE></rom_byte_mask>
+  <OWSItWasLastDevice><FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\1-Wire Search.asm</FILE><LINE>281</LINE></OWSItWasLastDevice>
+  <OWS_Reset><FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\1-Wire Search.asm</FILE><LINE>79</LINE></OWS_Reset>
+  <OWSResetOK><FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\1-Wire Search.asm</FILE><LINE>92</LINE></OWSResetOK>
+  <OWN_Return><FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\1-Wire Search.asm</FILE><LINE>297</LINE></OWN_Return>
+  <OWS_do><FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\1-Wire Search.asm</FILE><LINE>99</LINE></OWS_do>
+  <OWS_do_1_0><FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\1-Wire Search.asm</FILE><LINE>120</LINE></OWS_do_1_0>
+  <OWS_do_1_1><FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\1-Wire Search.asm</FILE><LINE>124</LINE></OWS_do_1_1>
+  <OWS_do_break><FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\1-Wire Search.asm</FILE><LINE>241</LINE></OWS_do_break>
+  <OWS_do_2><FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\1-Wire Search.asm</FILE><LINE>170</LINE></OWS_do_2>
+  <BitsEqual_End><FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\1-Wire Search.asm</FILE><LINE>156</LINE></BitsEqual_End>
+  <OWS_do_BitsEqual_else><FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\1-Wire Search.asm</FILE><LINE>152</LINE></OWS_do_BitsEqual_else>
+  <Calc_ROM_NO><FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\1-Wire Search.asm</FILE><LINE>309</LINE></Calc_ROM_NO>
+  <OWS_do_2_1><FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\1-Wire Search.asm</FILE><LINE>188</LINE></OWS_do_2_1>
+  <OWS_do_2_2><FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\1-Wire Search.asm</FILE><LINE>199</LINE></OWS_do_2_2>
+  <OWS_do_end><FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\1-Wire Search.asm</FILE><LINE>233</LINE></OWS_do_end>
+  <docrc8><FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\1-Wire Search.asm</FILE><LINE>367</LINE></docrc8>
+  <OWS_bo_break_0><FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\1-Wire Search.asm</FILE><LINE>248</LINE></OWS_bo_break_0>
+  <OWS_bo_break_00><FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\1-Wire Search.asm</FILE><LINE>255</LINE></OWS_bo_break_00>
+  <OWS_do_break_1><FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\1-Wire Search.asm</FILE><LINE>266</LINE></OWS_do_break_1>
+  <OWS_do_break_2><FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\1-Wire Search.asm</FILE><LINE>276</LINE></OWS_do_break_2>
+  <ROM_NO><FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\1-Wire Search.asm</FILE><LINE>418</LINE></ROM_NO>
+  <OWClearROM_NO><FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\1-Wire Search.asm</FILE><LINE>325</LINE></OWClearROM_NO>
+  <OWCRN><FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\1-Wire Search.asm</FILE><LINE>333</LINE></OWCRN>
+  <OWSendROM_NO><FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\1-Wire Search.asm</FILE><LINE>344</LINE></OWSendROM_NO>
+  <OWSNDRN><FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\1-Wire Search.asm</FILE><LINE>349</LINE></OWSNDRN>
+  <CRCtable><FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\1-Wire Search.asm</FILE><LINE>384</LINE></CRCtable>
+ </LABELS>
+</ASSEMBLER_INFO>
