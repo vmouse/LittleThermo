@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.1.52  D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\LittleThermo.asm Fri Oct 17 00:01:25 2014
+AVRASM ver. 2.1.52  D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\LittleThermo.asm Sat Oct 18 02:31:29 2014
 
 [builtin](2): Including file 'C:\Program Files (x86)\Atmel\Atmel Toolchain\AVR Assembler\Native\2.1.1117\avrassembler\Include\tn13def.inc'
 D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\LittleThermo.asm(8): Including file 'D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\avr.inc'
@@ -723,8 +723,8 @@ D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\1-wire.asm(168): Includin
                  	brts	PC+2
                  	ret
                  
-                 .EQU	led1 = PB0
-                 .EQU	led2 = PB1
+                 .EQU	led1 = PB1
+                 .EQU	led2 = PB0
                  .EQU	led3 = PB2
                  
                  //#define	F_CPU 8000000
@@ -844,8 +844,8 @@ D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\1-wire.asm(168): Includin
 000025 2b10      	or		r17, r16		; HI(R17)- младшие, LO(R17) - старшие
 000026 9512      	swap	r17				; теперь все на своих местах
                  
-000027 9ac0      	sbi		PORTB, led1		; turn off
-000028 9ac1      	sbi		PORTB, led2		; turn off
+000027 9ac1      	sbi		PORTB, led1		; turn off
+000028 9ac0      	sbi		PORTB, led2		; turn off
 000029 9ac2      	sbi		PORTB, led3		; turn off
                  
 00002a 3312      	cpi		r17, 50
@@ -855,12 +855,12 @@ D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\1-wire.asm(168): Includin
                  less50:
 00002e 3218      	cpi		r17, 40
 00002f f010      	brlo	less40	
-000030 98c1      	cbi		PORTB, led2
+000030 98c0      	cbi		PORTB, led2
 000031 9508      	ret
                  less40:
 000032 311e      	cpi		r17, 30
 000033 f010      	brlo	less30	
-000034 98c0      	cbi		PORTB, led1
+000034 98c1      	cbi		PORTB, led1
 000035 9508      	ret
                  less30:
 000036 9508      	ret

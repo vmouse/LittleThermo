@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.1.52  D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\LittleThermo.asm Fri Oct 17 00:01:25 2014
+AVRASM ver. 2.1.52  D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\LittleThermo.asm Sat Oct 18 02:31:29 2014
 
 
 EQU  SIGNATURE_000 0000001e
@@ -295,8 +295,8 @@ EQU  bit4         00000010
 EQU  bit5         00000020
 EQU  bit6         00000040
 EQU  bit7         00000080
-EQU  led1         00000000
-EQU  led2         00000001
+EQU  led1         00000001
+EQU  led2         00000000
 EQU  led3         00000002
 EQU  MaxInputSize 00000020
 DSEG LineBuf      00000060

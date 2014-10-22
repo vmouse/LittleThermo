@@ -7,8 +7,8 @@
 
  .include "avr.inc"
 
-.EQU	led1 = PB0
-.EQU	led2 = PB1
+.EQU	led1 = PB1
+.EQU	led2 = PB0
 .EQU	led3 = PB2
 
 //#define	F_CPU 8000000
