@@ -51,6 +51,7 @@
       <ToolName>Simulator</ToolName>
     </com_atmel_avrdbg_tool_simulator>
     <avrtoolinterface />
+    <preserveEEPROM>true</preserveEEPROM>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <ToolchainSettings>
@@ -68,7 +69,22 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="1-Wire Search.asm">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="1-wire.asm">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="AVR.INC">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="LittleThermo.asm">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="UART.ASM">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="wait.asm">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
