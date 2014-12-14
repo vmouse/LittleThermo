@@ -1,4 +1,4 @@
-﻿/*
+/*
  * LittleThermo.asm
  *
  *  Created: 16.10.2014 16:14:39
@@ -7,9 +7,9 @@
 
  .include "avr.inc"
 
-.EQU	led1 = PB0
-.EQU	led2 = PB1
-.EQU	led3 = PB2
+.EQU	l_green = PB0
+.EQU	l_blue = PB1
+.EQU	l_red = PB2
 
 //#define	F_CPU 8000000
 #define	F_CPU 9600000
@@ -19,6 +19,7 @@
 
 .dseg
 .ORG	RAMTOP
+
 ;.EQU	MaxInputSize	=	32
 ;LineBuf:.byte	MaxInputSize	;Command line characters buffer 
 ;ByteBuf:.byte	MaxInputSize/2  ;Command line bytes buffer
@@ -64,18 +65,17 @@ RETI	;	rjmp ADC ; ADC Conversion Handler
 RESET:
 	outi	SPL,low(RAMEND)		;
 ;	outi	SPH,high(RAMEND)	;
-	outi	DDRB, (1<<led1)|(1<<led2)|(1<<led3)
+	outi	DDRB, (1<<l_green)|(1<<l_blue)|(1<<l_red)
 	outi	PORTB, 0xff			; Pullup		
 
+	ldi		R25,0				; flashing flag
 
 ;----------------------------------------------------------;
 ; Main loop
 
 main:
-;rcall	SearchOneWire
 	rcall	ReadOneWire
-
-	rjmp	main
+rjmp	main
 
 .MACRO OW_cmd
 	ldi r16,@0 
@@ -88,7 +88,7 @@ main:
 ReadOneWire:
 	rcall	OWReset
 
-	// индикация наличия устройства
+// индикация наличия устройства
 //	in		r16, PINB
 //	ori		r16, (1<<led)
 //	bld		r16, led		; загрузить из T в led бит (если бит равен 0), то устройство на i2c есть и зажигаем диод
@@ -116,41 +116,59 @@ read_temp_onewire:			; читаем и преобразуем температу
 	brlo	temp_up_zerro	; выше нуля - уходим
 //; тут надо сделать преобразование из дополненного кода, но пока упростим
 	andi	r16, 0x07		; просто отсечем биты знака (что не правильно) и возьмем целую часть
+
 temp_up_zerro:
 	andi	r17, 0xf0		; HI(R17) = младшие знаки температуры
 	or		r17, r16		; HI(R17)- младшие, LO(R17) - старшие
 	swap	r17				; теперь все на своих местах
 
-	sbi		PORTB, led1		; turn off blue
-	sbi		PORTB, led2		; turn off green
-	sbi		PORTB, led3		; turn off red
+	sbi		PORTB, l_blue	; turn off blue
+	sbi		PORTB, l_green	; turn off green
+	sbi		PORTB, l_red	; turn off red
 
-	cpi		r17, 39
+rjmp less35
+	cpi		r17, 39			; >39 ultra high, flash red
 	brlo	less39
 
-	in		r16, PORTB		; ultra high
-	ldi		r18, (1<<led3)
-	eor		r16, r18
-	out		PORTB, r16		; flash bit led3
+	com		r25				; flip flash status
+	brne	flash1
+	cbi		PORTB, l_red		
 	ret
-less39:
+flash1:
+	sbi		PORTB, l_red
+	ret
+less39:						; 38-39 high
 	cpi		r17, 38
 	brlo	less38
-	cbi		PORTB, led3		; high
+	cbi		PORTB, l_red	
 	ret
-less38:
+less38:						; 37-38 raised
 	cpi		r17, 37
 	brlo	less37	
-	cbi		PORTB, led2		; raised
-	cbi		PORTB, led3		; raised
+	com		r25				; flip flash status
+	brne	flash2
+	cbi		PORTB, l_red
 	ret
-less37:
+flash2:	
+	cbi		PORTB, l_green	
+	ret
+less37:						; 36-37 normal
 	cpi		r17, 36
 	brlo	less36	
-	cbi		PORTB, led2		; normal
+	cbi		PORTB, l_green		
 	ret
-less36:
-	cbi		PORTB, led1		; low
+less36:						; 35-36 low
+	cpi		r17, 35
+	brlo	less35	
+	cbi		PORTB, l_blue		
+	ret
+less35:						; <35 very low
+	com		r25				; flip flash status
+	brne	flash3
+	cbi		PORTB, l_blue
+	ret
+flash3:	
+	sbi		PORTB, l_blue	
 	ret
 
 .include "1-wire.asm"

@@ -25,20 +25,23 @@
   <FILE>LittleThermo.lss</FILE>
  </OUTPUT_FILES>
  <LABELS>
-  <LineBuf><FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\LittleThermo.asm</FILE><LINE>23</LINE></LineBuf>
-  <ByteBuf><FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\LittleThermo.asm</FILE><LINE>24</LINE></ByteBuf>
-  <RESET><FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\LittleThermo.asm</FILE><LINE>64</LINE></RESET>
-  <main><FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\LittleThermo.asm</FILE><LINE>74</LINE></main>
+  <RESET><FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\LittleThermo.asm</FILE><LINE>65</LINE></RESET>
+  <main><FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\LittleThermo.asm</FILE><LINE>76</LINE></main>
   <ReadOneWire><FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\LittleThermo.asm</FILE><LINE>88</LINE></ReadOneWire>
   <OWReset><FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\1-wire.asm</FILE><LINE>34</LINE></OWReset>
   <OWWriteByte><FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\1-wire.asm</FILE><LINE>93</LINE></OWWriteByte>
   <WaitMiliseconds><FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\wait.asm</FILE><LINE>62</LINE></WaitMiliseconds>
   <read_temp_onewire><FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\LittleThermo.asm</FILE><LINE>111</LINE></read_temp_onewire>
   <OWReadByte><FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\1-wire.asm</FILE><LINE>152</LINE></OWReadByte>
-  <temp_up_zerro><FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\LittleThermo.asm</FILE><LINE>119</LINE></temp_up_zerro>
-  <less50><FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\LittleThermo.asm</FILE><LINE>132</LINE></less50>
-  <less40><FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\LittleThermo.asm</FILE><LINE>137</LINE></less40>
-  <less30><FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\LittleThermo.asm</FILE><LINE>142</LINE></less30>
+  <temp_up_zerro><FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\LittleThermo.asm</FILE><LINE>120</LINE></temp_up_zerro>
+  <less35><FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\LittleThermo.asm</FILE><LINE>165</LINE></less35>
+  <less39><FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\LittleThermo.asm</FILE><LINE>140</LINE></less39>
+  <flash1><FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\LittleThermo.asm</FILE><LINE>137</LINE></flash1>
+  <less38><FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\LittleThermo.asm</FILE><LINE>145</LINE></less38>
+  <less37><FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\LittleThermo.asm</FILE><LINE>155</LINE></less37>
+  <flash2><FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\LittleThermo.asm</FILE><LINE>152</LINE></flash2>
+  <less36><FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\LittleThermo.asm</FILE><LINE>160</LINE></less36>
+  <flash3><FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\LittleThermo.asm</FILE><LINE>170</LINE></flash3>
   <Wait4xCycles><FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\wait.asm</FILE><LINE>50</LINE></Wait4xCycles>
   <WaitMsLoop><FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\wait.asm</FILE><LINE>64</LINE></WaitMsLoop>
   <OWWriteBit><FILE>D:\Workshop\AVR\LittleThermo\LittleThermo\LittleThermo\1-wire.asm</FILE><LINE>66</LINE></OWWriteBit>

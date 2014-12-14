@@ -1,51 +1,51 @@
 ;***********************************************************************************
-; Поиск устройств на шине 1-Wire
-; Оригинал: Application Note 187. 1-Wire Search Algorithm by Dallas, С code
-; портировано на ассемблер: StarXXX, http://hardisoft.ru (c) 2009
+; РџРѕРёСЃРє СѓСЃС‚СЂРѕР№СЃС‚РІ РЅР° С€РёРЅРµ 1-Wire
+; РћСЂРёРіРёРЅР°Р»: Application Note 187. 1-Wire Search Algorithm by Dallas, РЎ code
+; РїРѕСЂС‚РёСЂРѕРІР°РЅРѕ РЅР° Р°СЃСЃРµРјР±Р»РµСЂ: StarXXX, http://hardisoft.ru (c) 2009
 ;***********************************************************************************
-; Порядок использования:
-;	1) Очистить ROM_NO вызовом подпрограммы OWClearROM_NO
-;	2) Произвести первый поиск вызовом подпрограммы OWFirst
-;	3) если флаг search_result в регистре search_flags = 1 тогда сохранить 
-;		найденный код ПЗУ из ROM_NO, произвести следующий поиск вызовом 
-;		подпрограммы OWNext и перейти к пункту 3
+; РџРѕСЂСЏРґРѕРє РёСЃРїРѕР»СЊР·РѕРІР°РЅРёСЏ:
+;	1) РћС‡РёСЃС‚РёС‚СЊ ROM_NO РІС‹Р·РѕРІРѕРј РїРѕРґРїСЂРѕРіСЂР°РјРјС‹ OWClearROM_NO
+;	2) РџСЂРѕРёР·РІРµСЃС‚Рё РїРµСЂРІС‹Р№ РїРѕРёСЃРє РІС‹Р·РѕРІРѕРј РїРѕРґРїСЂРѕРіСЂР°РјРјС‹ OWFirst
+;	3) РµСЃР»Рё С„Р»Р°Рі search_result РІ СЂРµРіРёСЃС‚СЂРµ search_flags = 1 С‚РѕРіРґР° СЃРѕС…СЂР°РЅРёС‚СЊ 
+;		РЅР°Р№РґРµРЅРЅС‹Р№ РєРѕРґ РџР—РЈ РёР· ROM_NO, РїСЂРѕРёР·РІРµСЃС‚Рё СЃР»РµРґСѓСЋС‰РёР№ РїРѕРёСЃРє РІС‹Р·РѕРІРѕРј 
+;		РїРѕРґРїСЂРѕРіСЂР°РјРјС‹ OWNext Рё РїРµСЂРµР№С‚Рё Рє РїСѓРЅРєС‚Сѓ 3
 ;
-; Используемые регистры: r16, r17, r20 (search_flags)
+; РСЃРїРѕР»СЊР·СѓРµРјС‹Рµ СЂРµРіРёСЃС‚СЂС‹: r16, r17, r20 (search_flags)
 ;
 ; 
-; Поиск использует внешние подпрограммы:
+; РџРѕРёСЃРє РёСЃРїРѕР»СЊР·СѓРµС‚ РІРЅРµС€РЅРёРµ РїРѕРґРїСЂРѕРіСЂР°РјРјС‹:
 ;
-;	OWReset - Выполняет сброс линии 1-Wire, принимает от устройств импульс
-;			присутствия PRESENCE. После вызова этой процедуры в флаге Т регистра 
-;			SREG содержится бит присутствия: 1 - если на шине нет устройств, 
-;			0 - если есть
+;	OWReset - Р’С‹РїРѕР»РЅСЏРµС‚ СЃР±СЂРѕСЃ Р»РёРЅРёРё 1-Wire, РїСЂРёРЅРёРјР°РµС‚ РѕС‚ СѓСЃС‚СЂРѕР№СЃС‚РІ РёРјРїСѓР»СЊСЃ
+;			РїСЂРёСЃСѓС‚СЃС‚РІРёСЏ PRESENCE. РџРѕСЃР»Рµ РІС‹Р·РѕРІР° СЌС‚РѕР№ РїСЂРѕС†РµРґСѓСЂС‹ РІ С„Р»Р°РіРµ Рў СЂРµРіРёСЃС‚СЂР° 
+;			SREG СЃРѕРґРµСЂР¶РёС‚СЃСЏ Р±РёС‚ РїСЂРёСЃСѓС‚СЃС‚РІРёСЏ: 1 - РµСЃР»Рё РЅР° С€РёРЅРµ РЅРµС‚ СѓСЃС‚СЂРѕР№СЃС‚РІ, 
+;			0 - РµСЃР»Рё РµСЃС‚СЊ
 ;
-;	OWWriteByte - Эта процедура отправляет 1 байт в линию 1-Wire. Отправляемый 
-;			байт должен быть помещен в регистр r16
+;	OWWriteByte - Р­С‚Р° РїСЂРѕС†РµРґСѓСЂР° РѕС‚РїСЂР°РІР»СЏРµС‚ 1 Р±Р°Р№С‚ РІ Р»РёРЅРёСЋ 1-Wire. РћС‚РїСЂР°РІР»СЏРµРјС‹Р№ 
+;			Р±Р°Р№С‚ РґРѕР»Р¶РµРЅ Р±С‹С‚СЊ РїРѕРјРµС‰РµРЅ РІ СЂРµРіРёСЃС‚СЂ r16
 ;	
-;	OWReadBit - Эта процедура читает 1 бит из линии 1-Wire. Принятый бит 
-;			помещается в флаг С регистра SREG
+;	OWReadBit - Р­С‚Р° РїСЂРѕС†РµРґСѓСЂР° С‡РёС‚Р°РµС‚ 1 Р±РёС‚ РёР· Р»РёРЅРёРё 1-Wire. РџСЂРёРЅСЏС‚С‹Р№ Р±РёС‚ 
+;			РїРѕРјРµС‰Р°РµС‚СЃСЏ РІ С„Р»Р°Рі РЎ СЂРµРіРёСЃС‚СЂР° SREG
 ;
-;	OWWriteBit - Эта процедура отправляет 1 бит в линию 1-Wire. Отправляемый 
-;			бит должен быть помещен в флаг С регистра SREG
+;	OWWriteBit - Р­С‚Р° РїСЂРѕС†РµРґСѓСЂР° РѕС‚РїСЂР°РІР»СЏРµС‚ 1 Р±РёС‚ РІ Р»РёРЅРёСЋ 1-Wire. РћС‚РїСЂР°РІР»СЏРµРјС‹Р№ 
+;			Р±РёС‚ РґРѕР»Р¶РµРЅ Р±С‹С‚СЊ РїРѕРјРµС‰РµРЅ РІ С„Р»Р°Рі РЎ СЂРµРіРёСЃС‚СЂР° SREG
 ;
 ;***********************************************************************************
 
 
-; Флаги
+; Р¤Р»Р°РіРё
 .equ		search_result		= 0
 .equ		search_direction 	= 1
 .equ		LastDeviceFlag		= 2
 
-; Регистры
+; Р РµРіРёСЃС‚СЂС‹
 .def		search_flags		= r20
 
 
 ;------------------------------------------------------------------------------
-; Поиск первого устройства на шине
+; РџРѕРёСЃРє РїРµСЂРІРѕРіРѕ СѓСЃС‚СЂРѕР№СЃС‚РІР° РЅР° С€РёРЅРµ
 ;------------------------------------------------------------------------------
 OWFirst:
-    ; обнуление переменных
+    ; РѕР±РЅСѓР»РµРЅРёРµ РїРµСЂРµРјРµРЅРЅС‹С…
 	clr		r16
 	sts		LastDiscrepancy, r16
 	sts		LastFamilyDiscrepancy, r16
@@ -56,10 +56,10 @@ OWFirst:
 
 
 ;------------------------------------------------------------------------------
-; Поиск следующего устройства на шине
+; РџРѕРёСЃРє СЃР»РµРґСѓСЋС‰РµРіРѕ СѓСЃС‚СЂРѕР№СЃС‚РІР° РЅР° С€РёРЅРµ
 ;------------------------------------------------------------------------------
 OWNext:
-	lds		search_flags, stored_search_flags	; Восстанавливаем флаги предыдущего поиска
+	lds		search_flags, stored_search_flags	; Р’РѕСЃСЃС‚Р°РЅР°РІР»РёРІР°РµРј С„Р»Р°РіРё РїСЂРµРґС‹РґСѓС‰РµРіРѕ РїРѕРёСЃРєР°
 
    	clr 	r16
    	sts 	last_zero, r16						; last_zero = 0
@@ -72,14 +72,14 @@ OWNext:
 
 	cbr		search_flags, 1<<search_result		; search_result = FALSE
 
-	sbrc	search_flags, LastDeviceFlag		; Это было последнее устройство?
-	rjmp 	OWSItWasLastDevice					; Да - переходим на OWSItWasLastDevice
+	sbrc	search_flags, LastDeviceFlag		; Р­С‚Рѕ Р±С‹Р»Рѕ РїРѕСЃР»РµРґРЅРµРµ СѓСЃС‚СЂРѕР№СЃС‚РІРѕ?
+	rjmp 	OWSItWasLastDevice					; Р”Р° - РїРµСЂРµС…РѕРґРёРј РЅР° OWSItWasLastDevice
 
 
-OWS_Reset:										; Сброс линии и проверка присутствия
+OWS_Reset:										; РЎР±СЂРѕСЃ Р»РёРЅРёРё Рё РїСЂРѕРІРµСЂРєР° РїСЂРёСЃСѓС‚СЃС‚РІРёСЏ
 	rcall 	OWReset
 	brtc 	OWSResetOK
-												; Никого нет? Тогда выходим
+												; РќРёРєРѕРіРѕ РЅРµС‚? РўРѕРіРґР° РІС‹С…РѕРґРёРј
 	clr 	r16
 	sts 	LastDiscrepancy, r16				; LastDiscrepancy = 0;
 	sts 	LastFamilyDiscrepancy, r16			; LastFamilyDiscrepancy = 0;
@@ -90,23 +90,23 @@ OWS_Reset:										; Сброс линии и проверка присутствия
 
 
 OWSResetOK:
-	ldi 	r16, 0xF0							; Посылаем команду поиска (0F)
+	ldi 	r16, 0xF0							; РџРѕСЃС‹Р»Р°РµРј РєРѕРјР°РЅРґСѓ РїРѕРёСЃРєР° (0F)
 	cli
 	rcall 	OWWriteByte
 	sei
 
 
-OWS_do:											; Основной цикл поиска
+OWS_do:											; РћСЃРЅРѕРІРЅРѕР№ С†РёРєР» РїРѕРёСЃРєР°
 	clr 	r16
 	clr 	r17
-	sbr		search_flags, 1<<search_direction	; Сразу поставим search_direction=1, потом если что - сбросим
+	sbr		search_flags, 1<<search_direction	; РЎСЂР°Р·Сѓ РїРѕСЃС‚Р°РІРёРј search_direction=1, РїРѕС‚РѕРј РµСЃР»Рё С‡С‚Рѕ - СЃР±СЂРѕСЃРёРј
 	
 	cli
-	rcall 	OWReadBit							; читаем id_bit -> C
-	rol 	r16									; из флага C в нулевой бит r16
+	rcall 	OWReadBit							; С‡РёС‚Р°РµРј id_bit -> C
+	rol 	r16									; РёР· С„Р»Р°РіР° C РІ РЅСѓР»РµРІРѕР№ Р±РёС‚ r16
 
-	rcall 	OWReadBit							; читаем cmp_id_bit -> C
-	rol 	r17									; из флага C в нулевой бит r17
+	rcall 	OWReadBit							; С‡РёС‚Р°РµРј cmp_id_bit -> C
+	rol 	r17									; РёР· С„Р»Р°РіР° C РІ РЅСѓР»РµРІРѕР№ Р±РёС‚ r17
 	sei
 
 	tst 	r16
@@ -114,92 +114,92 @@ OWS_do:											; Основной цикл поиска
 
 	tst 	r17
 	breq 	OWS_do_1_1
-	rjmp 	OWS_do_break						; id_bit = 1 и cmp_id_bit = 1 - на линии нет устройств!
+	rjmp 	OWS_do_break						; id_bit = 1 Рё cmp_id_bit = 1 - РЅР° Р»РёРЅРёРё РЅРµС‚ СѓСЃС‚СЂРѕР№СЃС‚РІ!
 
 
 OWS_do_1_0:
-	cbr		search_flags, 1<<search_direction	; search_direction пока повторяет id_bit
+	cbr		search_flags, 1<<search_direction	; search_direction РїРѕРєР° РїРѕРІС‚РѕСЂСЏРµС‚ id_bit
 
 
-OWS_do_1_1:										;  если id_bit не равен cmp_id_bit, тогда search_direction = id_bit
+OWS_do_1_1:										;  РµСЃР»Рё id_bit РЅРµ СЂР°РІРµРЅ cmp_id_bit, С‚РѕРіРґР° search_direction = id_bit
 	cp 		r16, r17
 	brne 	OWS_do_2
 
-	; Иначе - биты равны, тогда search_direction будет зависеть от id_bit_number и LastDiscrepancy
+	; РРЅР°С‡Рµ - Р±РёС‚С‹ СЂР°РІРЅС‹, С‚РѕРіРґР° search_direction Р±СѓРґРµС‚ Р·Р°РІРёСЃРµС‚СЊ РѕС‚ id_bit_number Рё LastDiscrepancy
 	
-	sbr		search_flags, 1<<search_direction	; установим пока search_direction = 1
+	sbr		search_flags, 1<<search_direction	; СѓСЃС‚Р°РЅРѕРІРёРј РїРѕРєР° search_direction = 1
 
-	lds 	r16, id_bit_number					; загружаем для проверки id_bit_number и LastDiscrepancy
+	lds 	r16, id_bit_number					; Р·Р°РіСЂСѓР¶Р°РµРј РґР»СЏ РїСЂРѕРІРµСЂРєРё id_bit_number Рё LastDiscrepancy
 	lds		r17, LastDiscrepancy
 
-	cp 		r16, r17							; сравниваем
-	breq	BitsEqual_End						; id_bit_number = LastDiscrepancy, значит оставляем search_direction = 1
-	brcc	OWS_do_BitsEqual_else				; id_bit_number > LastDiscrepancy, значит установим search_direction = 0
+	cp 		r16, r17							; СЃСЂР°РІРЅРёРІР°РµРј
+	breq	BitsEqual_End						; id_bit_number = LastDiscrepancy, Р·РЅР°С‡РёС‚ РѕСЃС‚Р°РІР»СЏРµРј search_direction = 1
+	brcc	OWS_do_BitsEqual_else				; id_bit_number > LastDiscrepancy, Р·РЅР°С‡РёС‚ СѓСЃС‚Р°РЅРѕРІРёРј search_direction = 0
 
-	; иначе id_bit_number < LastDiscrepancy, а это значит, что search_direction будет равен
-	; значению текущего бита в ROM_NO
+	; РёРЅР°С‡Рµ id_bit_number < LastDiscrepancy, Р° СЌС‚Рѕ Р·РЅР°С‡РёС‚, С‡С‚Рѕ search_direction Р±СѓРґРµС‚ СЂР°РІРµРЅ
+	; Р·РЅР°С‡РµРЅРёСЋ С‚РµРєСѓС‰РµРіРѕ Р±РёС‚Р° РІ ROM_NO
 				
-	rcall	Calc_ROM_NO							; Получаем указатель на ROM_NO[rom_byte_number]
-	ld		r16, y								; Получили в r16 ROM_NO[rom_byte_number]
-	lds		r17, rom_byte_mask					; Делаем ROM_NO[rom_byte_number] AND rom_byte_mask
+	rcall	Calc_ROM_NO							; РџРѕР»СѓС‡Р°РµРј СѓРєР°Р·Р°С‚РµР»СЊ РЅР° ROM_NO[rom_byte_number]
+	ld		r16, y								; РџРѕР»СѓС‡РёР»Рё РІ r16 ROM_NO[rom_byte_number]
+	lds		r17, rom_byte_mask					; Р”РµР»Р°РµРј ROM_NO[rom_byte_number] AND rom_byte_mask
 	and		r16, r17
 
-	brne	BitsEqual_End						; если после AND результат не нулевой, то оставим search_direction = 1
-	cbr		search_flags, 1<<search_direction	; иначе переключим search_direction в 0
+	brne	BitsEqual_End						; РµСЃР»Рё РїРѕСЃР»Рµ AND СЂРµР·СѓР»СЊС‚Р°С‚ РЅРµ РЅСѓР»РµРІРѕР№, С‚Рѕ РѕСЃС‚Р°РІРёРј search_direction = 1
+	cbr		search_flags, 1<<search_direction	; РёРЅР°С‡Рµ РїРµСЂРµРєР»СЋС‡РёРј search_direction РІ 0
 	rjmp 	BitsEqual_End
 
 
-OWS_do_BitsEqual_else:							; id_bit_number = LastDiscrepancy, значит оставляем search_direction = 1
+OWS_do_BitsEqual_else:							; id_bit_number = LastDiscrepancy, Р·РЅР°С‡РёС‚ РѕСЃС‚Р°РІР»СЏРµРј search_direction = 1
 	cbr		search_flags, 1<<search_direction
 
 
 BitsEqual_End:
-	sbrc	search_flags, search_direction		; если search_direction = 0,
+	sbrc	search_flags, search_direction		; РµСЃР»Рё search_direction = 0,
 	rjmp 	OWS_do_2
 
-	lds 	r16, id_bit_number					; тогда last_zero = id_bit_number
+	lds 	r16, id_bit_number					; С‚РѕРіРґР° last_zero = id_bit_number
 	sts 	last_zero, r16
 
-	; проверка последнего различия в коде семейства.
-	cpi 	r16, 9								; Если last_zero < 9
+	; РїСЂРѕРІРµСЂРєР° РїРѕСЃР»РµРґРЅРµРіРѕ СЂР°Р·Р»РёС‡РёСЏ РІ РєРѕРґРµ СЃРµРјРµР№СЃС‚РІР°.
+	cpi 	r16, 9								; Р•СЃР»Рё last_zero < 9
 	brcc 	OWS_do_2
 
-	sts 	LastFamilyDiscrepancy, r16  		; тогда LastFamilyDiscrepancy = last_zero;
+	sts 	LastFamilyDiscrepancy, r16  		; С‚РѕРіРґР° LastFamilyDiscrepancy = last_zero;
 
 
 OWS_do_2:
-	rcall	Calc_ROM_NO							; Получаем указатель на ROM_NO[rom_byte_number]
+	rcall	Calc_ROM_NO							; РџРѕР»СѓС‡Р°РµРј СѓРєР°Р·Р°С‚РµР»СЊ РЅР° ROM_NO[rom_byte_number]
 
-	; Устанавливаем или сбрасываем бит в позиции rom_byte_mask байта rom_byte_number
-	; в зависимости от search_direction
+	; РЈСЃС‚Р°РЅР°РІР»РёРІР°РµРј РёР»Рё СЃР±СЂР°СЃС‹РІР°РµРј Р±РёС‚ РІ РїРѕР·РёС†РёРё rom_byte_mask Р±Р°Р№С‚Р° rom_byte_number
+	; РІ Р·Р°РІРёСЃРёРјРѕСЃС‚Рё РѕС‚ search_direction
 
-	sbrs	search_flags, search_direction		;если search_direction = 1
+	sbrs	search_flags, search_direction		;РµСЃР»Рё search_direction = 1
 	rjmp	OWS_do_2_1
 
-	; Тогда, устанавливаем бит в 1: ROM_NO[rom_byte_number] = ROM_NO[rom_byte_number] OR rom_byte_mask;
+	; РўРѕРіРґР°, СѓСЃС‚Р°РЅР°РІР»РёРІР°РµРј Р±РёС‚ РІ 1: ROM_NO[rom_byte_number] = ROM_NO[rom_byte_number] OR rom_byte_mask;
 
-	ld 		r16, y								; Получили в r16 ROM_NO[rom_byte_number]
-	lds		r17, rom_byte_mask					; получили в r17 rom_byte_mask
-	or 		r16, r17							; сделали ROM_NO[rom_byte_number] OR rom_byte_mask
+	ld 		r16, y								; РџРѕР»СѓС‡РёР»Рё РІ r16 ROM_NO[rom_byte_number]
+	lds		r17, rom_byte_mask					; РїРѕР»СѓС‡РёР»Рё РІ r17 rom_byte_mask
+	or 		r16, r17							; СЃРґРµР»Р°Р»Рё ROM_NO[rom_byte_number] OR rom_byte_mask
 	
 	rjmp 	OWS_do_2_2
 
 			
 OWS_do_2_1:										
-	; иначе search_direction = 1
-	; Тогда сбрасываем бит в 0: ROM_NO[rom_byte_number] = ROM_NO[rom_byte_number] AND (rom_byte_mask XOR FF);
-	lds		r17, rom_byte_mask					; получили в r17 rom_byte_mask
+	; РёРЅР°С‡Рµ search_direction = 1
+	; РўРѕРіРґР° СЃР±СЂР°СЃС‹РІР°РµРј Р±РёС‚ РІ 0: ROM_NO[rom_byte_number] = ROM_NO[rom_byte_number] AND (rom_byte_mask XOR FF);
+	lds		r17, rom_byte_mask					; РїРѕР»СѓС‡РёР»Рё РІ r17 rom_byte_mask
 	ldi		r16, 0xFF
-	EOR		R17, R16							; инвертировали R17
+	EOR		R17, R16							; РёРЅРІРµСЂС‚РёСЂРѕРІР°Р»Рё R17
 
-	ld 		r16, y								; Получили в r16 ROM_NO[rom_byte_number]
-	AND		r16, r17							; сделали ROM_NO[rom_byte_number] AND (rom_byte_mask XOR FF)
+	ld 		r16, y								; РџРѕР»СѓС‡РёР»Рё РІ r16 ROM_NO[rom_byte_number]
+	AND		r16, r17							; СЃРґРµР»Р°Р»Рё ROM_NO[rom_byte_number] AND (rom_byte_mask XOR FF)
 
 
 OWS_do_2_2:
-	ST 		y, r16								; записали назад в ROM_NO[rom_byte_number]
+	ST 		y, r16								; Р·Р°РїРёСЃР°Р»Рё РЅР°Р·Р°Рґ РІ ROM_NO[rom_byte_number]
 
-	sec											; отсылаем бит search_direction в шину, чтобы заткнуть те устройства, у которых этот бит не такой
+	sec											; РѕС‚СЃС‹Р»Р°РµРј Р±РёС‚ search_direction РІ С€РёРЅСѓ, С‡С‚РѕР±С‹ Р·Р°С‚РєРЅСѓС‚СЊ С‚Рµ СѓСЃС‚СЂРѕР№СЃС‚РІР°, Сѓ РєРѕС‚РѕСЂС‹С… СЌС‚РѕС‚ Р±РёС‚ РЅРµ С‚Р°РєРѕР№
 	sbrs	search_flags, search_direction		
 	clc
 	cli
@@ -210,83 +210,83 @@ OWS_do_2_2:
 	inc 	r16
 	sts 	id_bit_number, r16
 
-	lds 	r16, rom_byte_mask					; Сдвигаем влево rom_byte_mask на 1 бит
+	lds 	r16, rom_byte_mask					; РЎРґРІРёРіР°РµРј РІР»РµРІРѕ rom_byte_mask РЅР° 1 Р±РёС‚
 	lsl 	r16
 	sts 	rom_byte_mask, r16
-	brne 	OWS_do_end							; если еще не все биты в текущем байте прошли - то бегом на следующую итерацию цикла поиска
+	brne 	OWS_do_end							; РµСЃР»Рё РµС‰Рµ РЅРµ РІСЃРµ Р±РёС‚С‹ РІ С‚РµРєСѓС‰РµРј Р±Р°Р№С‚Рµ РїСЂРѕС€Р»Рё - С‚Рѕ Р±РµРіРѕРј РЅР° СЃР»РµРґСѓСЋС‰СѓСЋ РёС‚РµСЂР°С†РёСЋ С†РёРєР»Р° РїРѕРёСЃРєР°
 
-	; иначе добавляем CRC этого байта в общее CRC
+	; РёРЅР°С‡Рµ РґРѕР±Р°РІР»СЏРµРј CRC СЌС‚РѕРіРѕ Р±Р°Р№С‚Р° РІ РѕР±С‰РµРµ CRC
 
-	rcall	Calc_ROM_NO							; Получаем указатель на ROM_NO[rom_byte_number]
-	ld		r16, y								; Получили в r16 ROM_NO[rom_byte_number]
+	rcall	Calc_ROM_NO							; РџРѕР»СѓС‡Р°РµРј СѓРєР°Р·Р°С‚РµР»СЊ РЅР° ROM_NO[rom_byte_number]
+	ld		r16, y								; РџРѕР»СѓС‡РёР»Рё РІ r16 ROM_NO[rom_byte_number]
 
-	rcall 	docrc8								; CRC готова
+	rcall 	docrc8								; CRC РіРѕС‚РѕРІР°
 
 	lds 	r16, rom_byte_number				; rom_byte_number = rom_byte_number+1;
 	inc 	r16
 	sts 	rom_byte_number, r16
 
-	ldi 	r16, 1								; Сбрасываем битовую маску в 1
+	ldi 	r16, 1								; РЎР±СЂР°СЃС‹РІР°РµРј Р±РёС‚РѕРІСѓСЋ РјР°СЃРєСѓ РІ 1
 	sts 	rom_byte_mask, r16
 
 
-OWS_do_end:										; Крутим цикл пока rom_byte_number < 8
+OWS_do_end:										; РљСЂСѓС‚РёРј С†РёРєР» РїРѕРєР° rom_byte_number < 8
 	lds 	r16, rom_byte_number
 	cpi 	r16, 8
 	brcc 	OWS_do_break
 	rjmp 	OWS_do
 
 
-	; если поиск прошел успешно, тогда id_bit_number будет больше 64 и crc8 будет равна 0
+	; РµСЃР»Рё РїРѕРёСЃРє РїСЂРѕС€РµР» СѓСЃРїРµС€РЅРѕ, С‚РѕРіРґР° id_bit_number Р±СѓРґРµС‚ Р±РѕР»СЊС€Рµ 64 Рё crc8 Р±СѓРґРµС‚ СЂР°РІРЅР° 0
 OWS_do_break:
 	lds 	r16, id_bit_number
 	cpi 	r16, 65
 	brcc 	OWS_bo_break_0
-	rjmp 	OWSItWasLastDevice					; id_bit_number < 65, ошибка!
+	rjmp 	OWSItWasLastDevice					; id_bit_number < 65, РѕС€РёР±РєР°!
 
 
 OWS_bo_break_0:
 	lds 	r16, crc8
 	tst 	r16
 	breq 	OWS_bo_break_00
-	rjmp 	OWSItWasLastDevice					; crc8 не равно 0, ошибка!
+	rjmp 	OWSItWasLastDevice					; crc8 РЅРµ СЂР°РІРЅРѕ 0, РѕС€РёР±РєР°!
 
 
 OWS_bo_break_00:
-	; Поиск удался, установим флаги и переменные
+	; РџРѕРёСЃРє СѓРґР°Р»СЃСЏ, СѓСЃС‚Р°РЅРѕРІРёРј С„Р»Р°РіРё Рё РїРµСЂРµРјРµРЅРЅС‹Рµ
 	lds 	r16, last_zero						; LastDiscrepancy = last_zero;
 	sts 	LastDiscrepancy, r16
 
-	tst		r16									; если LastDiscrepancy = 0
+	tst		r16									; РµСЃР»Рё LastDiscrepancy = 0
 	brne 	OWS_do_break_1
 
-	sbr		search_flags, 1<<LastDeviceFlag		; то это был последний девайс на линии, LastDeviceFlag = 1
+	sbr		search_flags, 1<<LastDeviceFlag		; С‚Рѕ СЌС‚Рѕ Р±С‹Р» РїРѕСЃР»РµРґРЅРёР№ РґРµРІР°Р№СЃ РЅР° Р»РёРЅРёРё, LastDeviceFlag = 1
 
 
 OWS_do_break_1:
 	lds		r16, LastFamilyDiscrepancy
 	lds		r17, LastDiscrepancy
-	cp		r16,r17								; если LastFamilyDiscrepancy == LastDiscrepancy
+	cp		r16,r17								; РµСЃР»Рё LastFamilyDiscrepancy == LastDiscrepancy
 	brne	OWS_do_break_2
 
 	clr 	r16
-	sts		LastFamilyDiscrepancy, r16			; то LastFamilyDiscrepancy = 0
+	sts		LastFamilyDiscrepancy, r16			; С‚Рѕ LastFamilyDiscrepancy = 0
 
 
 OWS_do_break_2:
-	sbr		search_flags, 1<<search_result		; search_result = 1, ура, все ОК!
+	sbr		search_flags, 1<<search_result		; search_result = 1, СѓСЂР°, РІСЃРµ РћРљ!
 	rjmp	OWN_Return
 
 
 OWSItWasLastDevice:
-	sbrc	search_flags, search_result			; если search_result = 0
+	sbrc	search_flags, search_result			; РµСЃР»Рё search_result = 0
 	rjmp	OWN_Return
 
 	lds		r16, ROM_NO
 	tst 	r16
 	brne 	OWN_Return
 	
-	; Тогда сбрасываем флаги и переменные так, чтобы следующий вызов этой подпрограммы был равносилем вызову OWFirst
+	; РўРѕРіРґР° СЃР±СЂР°СЃС‹РІР°РµРј С„Р»Р°РіРё Рё РїРµСЂРµРјРµРЅРЅС‹Рµ С‚Р°Рє, С‡С‚РѕР±С‹ СЃР»РµРґСѓСЋС‰РёР№ РІС‹Р·РѕРІ СЌС‚РѕР№ РїРѕРґРїСЂРѕРіСЂР°РјРјС‹ Р±С‹Р» СЂР°РІРЅРѕСЃРёР»РµРј РІС‹Р·РѕРІСѓ OWFirst
 	cbr		search_flags, LastDeviceFlag		; LastDeviceFlag = 0
 	clr 	r16
 	sts 	LastDiscrepancy, r16				; LastDiscrepancy = 0	
@@ -295,7 +295,7 @@ OWSItWasLastDevice:
 
 
 OWN_Return:
-	sts		stored_search_flags, search_flags	; Сохраняем флаги для следующего поиска
+	sts		stored_search_flags, search_flags	; РЎРѕС…СЂР°РЅСЏРµРј С„Р»Р°РіРё РґР»СЏ СЃР»РµРґСѓСЋС‰РµРіРѕ РїРѕРёСЃРєР°
 	ret
 
 
@@ -303,13 +303,13 @@ OWN_Return:
 
 
 ;*********************************************************************		
-; 	Вычисляем указатель на ROM_NO[rom_byte_number]
+; 	Р’С‹С‡РёСЃР»СЏРµРј СѓРєР°Р·Р°С‚РµР»СЊ РЅР° ROM_NO[rom_byte_number]
 ;
 
 calc_ROM_NO:
-	ldi		yh, high(ROM_NO)					; указатель на ROM_NO
+	ldi		yh, high(ROM_NO)					; СѓРєР°Р·Р°С‚РµР»СЊ РЅР° ROM_NO
 	ldi		yl, low (ROM_NO)
-	lds		r16, rom_byte_number				; прибавляем к нему rom_byte_number
+	lds		r16, rom_byte_number				; РїСЂРёР±Р°РІР»СЏРµРј Рє РЅРµРјСѓ rom_byte_number
 	clr		r17
 	add		yl, r16
 	adc		yh, r17
@@ -320,11 +320,11 @@ calc_ROM_NO:
 
 
 ;*********************************************************************		
-;   Очистка буфера ROM_NO
+;   РћС‡РёСЃС‚РєР° Р±СѓС„РµСЂР° ROM_NO
 ; 	
 OWClearROM_NO:
 
-	ldi yh, high(ROM_NO)			; указатель на ROM_NO
+	ldi yh, high(ROM_NO)			; СѓРєР°Р·Р°С‚РµР»СЊ РЅР° ROM_NO
 	ldi yl, low (ROM_NO)
 
 	ldi r16, 8
@@ -339,12 +339,12 @@ OWCRN:
 
 
 ;*********************************************************************		
-;   Отправляет буфер ROM_NO (для команды MATCH)
+;   РћС‚РїСЂР°РІР»СЏРµС‚ Р±СѓС„РµСЂ ROM_NO (РґР»СЏ РєРѕРјР°РЅРґС‹ MATCH)
 ; 	
 OWSendROM_NO:
-	ldi yh, high(ROM_NO)			; указатель на ROM_NO
+	ldi yh, high(ROM_NO)			; СѓРєР°Р·Р°С‚РµР»СЊ РЅР° ROM_NO
 	ldi yl, low (ROM_NO)
-	ldi r17, 8						;счетчик байт
+	ldi r17, 8						;СЃС‡РµС‚С‡РёРє Р±Р°Р№С‚
 
 OWSNDRN:
 	ld r16, y+
@@ -358,11 +358,11 @@ OWSNDRN:
 
 
 ;*********************************************************************		
-;   выполняет подсчет CRC по алгоритму 1-Wire
-; 	вход: r16 - считанный байт
-; 	выход: CRC - содержит подсчитанную сумму
-; 	портит: регистр Z
-; 	примечание: перед первым вызовом CRC необходимо обнулить
+;   РІС‹РїРѕР»РЅСЏРµС‚ РїРѕРґСЃС‡РµС‚ CRC РїРѕ Р°Р»РіРѕСЂРёС‚РјСѓ 1-Wire
+; 	РІС…РѕРґ: r16 - СЃС‡РёС‚Р°РЅРЅС‹Р№ Р±Р°Р№С‚
+; 	РІС‹С…РѕРґ: CRC - СЃРѕРґРµСЂР¶РёС‚ РїРѕРґСЃС‡РёС‚Р°РЅРЅСѓСЋ СЃСѓРјРјСѓ
+; 	РїРѕСЂС‚РёС‚: СЂРµРіРёСЃС‚СЂ Z
+; 	РїСЂРёРјРµС‡Р°РЅРёРµ: РїРµСЂРµРґ РїРµСЂРІС‹Рј РІС‹Р·РѕРІРѕРј CRC РЅРµРѕР±С…РѕРґРёРјРѕ РѕР±РЅСѓР»РёС‚СЊ
 
 docrc8:
 	lds		r17, CRC8
@@ -382,7 +382,7 @@ docrc8:
 
 
 CRCtable:
-; таблица сигнатур для быстрого расчета контрольной суммы CRC-8
+; С‚Р°Р±Р»РёС†Р° СЃРёРіРЅР°С‚СѓСЂ РґР»СЏ Р±С‹СЃС‚СЂРѕРіРѕ СЂР°СЃС‡РµС‚Р° РєРѕРЅС‚СЂРѕР»СЊРЅРѕР№ СЃСѓРјРјС‹ CRC-8
 	.db		0, 94, 188, 226, 97, 63, 221, 131, 194, 156, 126, 32, 163, 253, 31, 65
 	.db 	157, 195, 33, 127, 252, 162, 64, 30, 95, 1, 227, 189, 62, 96, 130, 220
 	.db 	35, 125, 159, 193, 66, 28, 254, 160, 225, 191, 93, 3, 128, 222, 60, 98
@@ -404,7 +404,7 @@ CRCtable:
 
 
 
-; Переменные, необходимые для работы процедуры поиска
+; РџРµСЂРµРјРµРЅРЅС‹Рµ, РЅРµРѕР±С…РѕРґРёРјС‹Рµ РґР»СЏ СЂР°Р±РѕС‚С‹ РїСЂРѕС†РµРґСѓСЂС‹ РїРѕРёСЃРєР°
 .dseg
 
 stored_search_flags:	.db	0

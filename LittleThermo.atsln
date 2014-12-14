@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Atmel Studio Solution File, Format Version 11.00
-Project("{18226A42-8477-4023-8AD2-40C49DA407C9}") = "LittleThermo", "LittleThermo\LittleThermo.asmproj", "{B6B9A6C4-33B0-4DED-9D1C-DE59F51556DC}"
+Project("{18226A42-8477-4023-8AD2-40C49DA407C9}") = "LittleThermo", "LittleThermo\LittleThermo.asmproj", "{41D17CF1-4AFD-4F3E-A51C-AB7D923C54C4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -9,10 +9,10 @@ Global
 		Release|AVR = Release|AVR
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{B6B9A6C4-33B0-4DED-9D1C-DE59F51556DC}.Debug|AVR.ActiveCfg = Debug|AVR
-		{B6B9A6C4-33B0-4DED-9D1C-DE59F51556DC}.Debug|AVR.Build.0 = Debug|AVR
-		{B6B9A6C4-33B0-4DED-9D1C-DE59F51556DC}.Release|AVR.ActiveCfg = Release|AVR
-		{B6B9A6C4-33B0-4DED-9D1C-DE59F51556DC}.Release|AVR.Build.0 = Release|AVR
+		{41D17CF1-4AFD-4F3E-A51C-AB7D923C54C4}.Debug|AVR.ActiveCfg = Debug|AVR
+		{41D17CF1-4AFD-4F3E-A51C-AB7D923C54C4}.Debug|AVR.Build.0 = Debug|AVR
+		{41D17CF1-4AFD-4F3E-A51C-AB7D923C54C4}.Release|AVR.ActiveCfg = Release|AVR
+		{41D17CF1-4AFD-4F3E-A51C-AB7D923C54C4}.Release|AVR.Build.0 = Release|AVR
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectVersion>6.2</ProjectVersion>
     <ToolchainName>com.Atmel.AVRAssembler</ToolchainName>
-    <ProjectGuid>{b6b9a6c4-33b0-4ded-9d1c-de59f51556dc}</ProjectGuid>
+    <ProjectGuid>{41d17cf1-4afd-4f3e-a51c-ab7d923c54c4}</ProjectGuid>
     <avrdeviceseries>none</avrdeviceseries>
     <avrdevice>ATtiny13</avrdevice>
     <OutputFileName>$(MSBuildProjectName)</OutputFileName>
@@ -33,25 +33,21 @@
         <documentation help="" />
         <offline-documentation help="" />
         <dependencies>
-          <content-extension eid="atmel.asf" uuidref="Atmel.ASF" version="3.19.0" />
+          <content-extension eid="atmel.asf" uuidref="Atmel.ASF" version="3.20.1" />
         </dependencies>
       </framework-data>
     </AsfFrameworkConfig>
     <avrtool>com.atmel.avrdbg.tool.simulator</avrtool>
     <com_atmel_avrdbg_tool_simulator>
-      <ToolOptions>
+      <ToolOptions xmlns="">
         <InterfaceProperties>
         </InterfaceProperties>
-        <InterfaceName>
-        </InterfaceName>
       </ToolOptions>
-      <ToolType>com.atmel.avrdbg.tool.simulator</ToolType>
-      <ToolNumber>
+      <ToolType xmlns="">com.atmel.avrdbg.tool.simulator</ToolType>
+      <ToolNumber xmlns="">
       </ToolNumber>
-      <ToolName>Simulator</ToolName>
+      <ToolName xmlns="">Simulator</ToolName>
     </com_atmel_avrdbg_tool_simulator>
-    <avrtoolinterface />
-    <preserveEEPROM>true</preserveEEPROM>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <ToolchainSettings>
@@ -79,9 +75,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="LittleThermo.asm">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="UART.ASM">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="wait.asm">
