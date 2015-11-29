@@ -11,28 +11,24 @@
 .EQU	l_blue = PB1
 .EQU	l_red = PB2
 
-//#define	F_CPU 8000000
-#define	F_CPU 9600000
+//#define	F_CPU 8000000 // internal clock of ATTINY25/45/85
+#define	F_CPU 9600000	// internal clock of ATTINY13
 
-;----------------------------------------------------------;
-; Data memory area
+//----------------------------------------------------------
+// Data memory area
 
 .dseg
 .ORG	RAMTOP
 
-;.EQU	MaxInputSize	=	32
-;LineBuf:.byte	MaxInputSize	;Command line characters buffer 
-;ByteBuf:.byte	MaxInputSize/2  ;Command line bytes buffer
-
-;----------------------------------------------------------;
-; Program code area
+//----------------------------------------------------------
+// Program code area
 
 .CSEG
 .ORG $0000
 
 rjmp RESET ; Address 0x0000
 /*
-; Tiny 25/45/85 
+// Tiny 25/45/85 
 RETI	;	rjmp INT0_ISR ; Address 0x0001
 RETI	;	rjmp PCINT0_ISR ; Address 0x0002
 RETI	;	rjmp TIM1_COMPA_ISR ; Address 0x0003
@@ -48,7 +44,7 @@ RETI	;	rjmp WDT_ISR ; Address 0x000C
 RETI	;	rjmp USI_START_ISR ; Address 0x000D
 RETI	;	rjmp USI_OVF_ISR ; Address 0x000E
 */
-;Tiny13
+// Tiny13
 RETI	;	rjmp EXT_INT0 ; IRQ0 Handler
 RETI	;	rjmp PCINT0 ; PCINT0 Handler
 RETI	;	rjmp TIM0_OVF ; Timer0 Overflow Handler
@@ -64,14 +60,14 @@ RETI	;	rjmp ADC ; ADC Conversion Handler
 
 RESET:
 	outi	SPL,low(RAMEND)		;
-;	outi	SPH,high(RAMEND)	;
+;	outi	SPH,high(RAMEND)	; раскомментировать для ATTINY25/45/85
 	outi	DDRB, (1<<l_green)|(1<<l_blue)|(1<<l_red)
-	outi	PORTB, 0xff			; Pullup		
+	outi	PORTB, 0xff			; включаем Pullup-ы
 
-	ldi		R25,0				; flashing flag
+	ldi		R25,0				; регистр-флаг для эффектов мигания
 
-;----------------------------------------------------------;
-; Main loop
+//----------------------------------------------------------
+// Main loop
 
 main:
 	rcall	ReadOneWire
@@ -83,8 +79,8 @@ rjmp	main
 .ENDMACRO
 
 
-;----------------------------------------------------------;
-; Read temperature from _all_ connected devices, and read first result
+//----------------------------------------------------------
+// Read temperature from _all_ connected devices, and read the first result
 ReadOneWire:
 	rcall	OWReset
 
@@ -112,10 +108,10 @@ read_temp_onewire:			; читаем и преобразуем температу
 	rcall	OWReadByte		; младший байт HI - младшие разряды целых, LO - десятые
 	mov		r17, r16		
 	rcall	OWReadByte		; старший байт LO - старшие разряды целых
-	cpi		r16, 0x08			; проверям на отрицательность
+	cpi		r16, 0x08		; проверям на отрицательность
 	brlo	temp_up_zerro	; выше нуля - уходим
 //; тут надо сделать преобразование из дополненного кода, но пока упростим
-	andi	r16, 0x07		; просто отсечем биты знака (что не правильно) и возьмем целую часть
+	andi	r16, 0x07		; просто отсечем биты знака и возьмем целую часть
 
 temp_up_zerro:
 	andi	r17, 0xf0		; HI(R17) = младшие знаки температуры
@@ -126,49 +122,53 @@ temp_up_zerro:
 	sbi		PORTB, l_green	; turn off green
 	sbi		PORTB, l_red	; turn off red
 
-rjmp less35
 	cpi		r17, 39			; >39 ultra high, flash red
 	brlo	less39
-
 	com		r25				; flip flash status
-	brne	flash1
+	brne	flash_red
 	cbi		PORTB, l_red		
 	ret
-flash1:
+flash_red:
 	sbi		PORTB, l_red
 	ret
+
 less39:						; 38-39 high
 	cpi		r17, 38
 	brlo	less38
 	cbi		PORTB, l_red	
 	ret
+
 less38:						; 37-38 raised
 	cpi		r17, 37
 	brlo	less37	
 	com		r25				; flip flash status
-	brne	flash2
-	cbi		PORTB, l_red
+	brne	flash_green
+	cbi		PORTB, l_green
 	ret
-flash2:	
-	cbi		PORTB, l_green	
+flash_green:	
+	sbi		PORTB, l_green	
 	ret
+
 less37:						; 36-37 normal
 	cpi		r17, 36
 	brlo	less36	
 	cbi		PORTB, l_green		
 	ret
+
 less36:						; 35-36 low
 	cpi		r17, 35
 	brlo	less35	
 	cbi		PORTB, l_blue		
 	ret
+
 less35:						; <35 very low
 	com		r25				; flip flash status
-	brne	flash3
+	brne	flash_blue
 	cbi		PORTB, l_blue
 	ret
-flash3:	
+
+flash_blue:	
 	sbi		PORTB, l_blue	
 	ret
 
-.include "1-wire.asm"
+.include "1-wire.asm"	// библиотека функций работы с OneWire

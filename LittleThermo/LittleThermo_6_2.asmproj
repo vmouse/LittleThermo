@@ -2,7 +2,7 @@
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectVersion>7.0</ProjectVersion>
+    <ProjectVersion>6.2</ProjectVersion>
     <ToolchainName>com.Atmel.AVRAssembler</ToolchainName>
     <ProjectGuid>{41d17cf1-4afd-4f3e-a51c-ab7d923c54c4}</ProjectGuid>
     <avrdeviceseries>none</avrdeviceseries>
@@ -48,34 +48,20 @@
       </ToolNumber>
       <ToolName xmlns="">Simulator</ToolName>
     </com_atmel_avrdbg_tool_simulator>
-    <preserveEEPROM>true</preserveEEPROM>
-    <ExternalProgrammingToolCommand />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <ToolchainSettings>
       <AvrAssembler>
-  <avrasm.assembler.general.AdditionalIncludeDirectories>
-    <ListValues>
-      <Value>%24(PackRepoDir)\atmel\ATtiny_DFP\1.0.68\avrasm\inc</Value>
-      <Value>%24(PackRepoDir)\atmel\ATtiny_DFP\1.0.68\avrasm\inc</Value>
-    </ListValues>
-  </avrasm.assembler.general.AdditionalIncludeDirectories>
-  <avrasm.assembler.general.IncludeFile>tn13def.inc</avrasm.assembler.general.IncludeFile>
-</AvrAssembler>
+        <avrasm.assembler.general.IncludeFile>(%24IncludeFile)</avrasm.assembler.general.IncludeFile>
+      </AvrAssembler>
     </ToolchainSettings>
     <OutputType>Executable</OutputType>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <ToolchainSettings>
       <AvrAssembler>
-  <avrasm.assembler.general.AdditionalIncludeDirectories>
-    <ListValues>
-      <Value>%24(PackRepoDir)\atmel\ATtiny_DFP\1.0.68\avrasm\inc</Value>
-      <Value>%24(PackRepoDir)\atmel\ATtiny_DFP\1.0.68\avrasm\inc</Value>
-    </ListValues>
-  </avrasm.assembler.general.AdditionalIncludeDirectories>
-  <avrasm.assembler.general.IncludeFile>tn13def.inc</avrasm.assembler.general.IncludeFile>
-</AvrAssembler>
+        <avrasm.assembler.general.IncludeFile>(%24IncludeFile)</avrasm.assembler.general.IncludeFile>
+      </AvrAssembler>
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
