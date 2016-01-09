@@ -49,3 +49,15 @@ LittleThermo/Debug/LittleThermo.hex
 *.tmp
 LittleThermo/Debug/LittleThermo.tmp
 LittleThermo/Debug/LittleThermo.map
+LittleThermo/Debug/LittleThermo.lss
+LittleThermo/Debug/LittleThermo.tmp
+*.tmp
+LittleThermo/Debug/LittleThermo.obj
+*.map
+LittleThermo/Debug/LittleThermo.lss
+*.lss
+*.hex
+*.lss
+*.map
+*.obj
+*.tmp
